@@ -22,7 +22,7 @@ else
   echo "Cross-compiler already installed"
 fi
 
-export PATH=$here/compiler/i686-elf/bin:$here/lib/objconv:$PATH
+export PATH=$cross/$compiler/bin:$PATH
 export CC=i686-elf-gcc
 export CXX=i686-elf-g++
 export CPP=i686-elf-cpp
