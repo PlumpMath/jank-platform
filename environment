@@ -5,7 +5,7 @@ set -eu
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 target=i686-elf
-gcc_version=5.2.0
+gcc_version=5.3.0
 host=Linux-x86_64
 cross=~/cross
 compiler=$target-$gcc_version-$host
@@ -14,6 +14,7 @@ compiler_archive=$compiler.tar.xz
 if [ ! -d "$cross/$compiler" ];
 then
   echo "Installing cross-compiler"
+  mkdir -p ~/cross
   pushd ~/cross
     wget "http://newos.org/toolchains/$compiler_archive"
     tar xvf $compiler_archive
