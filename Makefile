@@ -19,6 +19,7 @@ boot.o:
 
 myos.bin: kernel.o boot.o
 	${CXX} -T linker.ld -o myos.bin ${cxx_flags} boot.o kernel.o -lgcc
+	grub-file --is-x86-multiboot myos.bin
 
 qemu: myos.bin
 	qemu-system-i386 -kernel myos.bin
