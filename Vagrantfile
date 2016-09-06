@@ -65,35 +65,6 @@ Vagrant.configure("2") do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
-    pacman --noconfirm --needed -Syu gcc unzip processing
-    yaourt --noconfirm -Sa crosstool-ng-git
-    pushd /opt/cross
-      ct-ng x86_64-unknown-linux-gnu
-      ct-ng build
-    popd
-
-    pushd /vagrant
-      if [ -d ./cross ];
-      then
-        echo "Cross-compiler exists"
-      else
-        echo "Downloading cross-compiler"
-
-        cross_compiler=environment
-        rm -f $cross_compiler
-        ( cat <<EOF
-        export PATH=/vagrant/compiler/i686-elf/bin:/vagrant/lib/objconv:\$PATH
-        export CC=i686-elf-gcc
-        export CXX=i686-elf-g++
-        export CPP=i686-elf-cpp
-        export LD=i686-elf-gcc
-        export AS=i686-elf-as
-EOF
-        ) > $cross_compiler
-
-        chmod +x $cross_compiler
-        chmod a+r $cross_compiler
-      fi
-    popd
+    pacman --noconfirm --needed -Syu gcc unzip libisoburn
   SHELL
 end
