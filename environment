@@ -7,7 +7,7 @@ here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 target=i386-elf
 gcc_version=5.3.0
 host=Linux-x86_64
-cross=~/cross
+cross=$HOME/cross
 compiler=$target-$gcc_version-$host
 compiler_archive=$compiler.tar.xz
 
@@ -24,10 +24,10 @@ else
 fi
 
 export PATH=$cross/$compiler/bin:$PATH
-export CC=i686-elf-gcc
-export CXX=i686-elf-g++
-export CPP=i686-elf-cpp
-export LD=i686-elf-gcc
-export AS=i686-elf-as
+export CC=$target-gcc
+export CXX=$target-g++
+export CPP=$target-cpp
+export LD=$target-gcc
+export AS=$target-as
 
 bash
