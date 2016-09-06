@@ -30,4 +30,4 @@ export CPP=$target-cpp
 export LD=$target-gcc
 export AS=$target-as
 
-bash
+bash --init-file $here/bashrc
