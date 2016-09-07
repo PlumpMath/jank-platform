@@ -7,6 +7,7 @@ clean:
 
 cxx_flags=-std=c++14 \
 					-ffreestanding \
+					-ggdb \
 					-O3 -Wall -Wextra -Werror -pedantic \
 					-nostdlib -fno-exceptions -fno-rtti \
 					#-mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2
