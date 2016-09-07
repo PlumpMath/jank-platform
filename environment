@@ -23,6 +23,13 @@ else
   echo "Cross-compiler already installed"
 fi
 
+if [ ! -f "$HOME/.gdbinit" ];
+then
+  cat <<EOF > $HOME/.gdbinit
+add-auto-load-safe-path /vagrant/.gdbinit
+EOF
+fi
+
 export PATH=$cross/$compiler/bin:$PATH
 export CC=$target-gcc
 export CXX=$target-g++
