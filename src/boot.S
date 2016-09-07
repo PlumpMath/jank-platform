@@ -81,8 +81,9 @@ mov $stack_top, %esp
 # runtime support to work as well.
 
 # Verify that GRUB handled our multiboot requests properly
-cmp %eax, 0x2BADB002
-jne .invalid_boot
+#cmp %eax, 0x2BADB002
+#jne .invalid_boot
+push %eax
 
 # Pass Multiboot structure to main
 push %ebx
