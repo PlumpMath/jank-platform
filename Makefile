@@ -8,7 +8,7 @@ clean:
 cxx_flags=-std=c++14 \
 					-ffreestanding \
 					-ggdb \
-					-O3 -Wall -Wextra -Werror -pedantic \
+					-O0 -Wall -Wextra -Werror -pedantic \
 					-nostdlib -fno-exceptions -fno-rtti \
 					#-mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2
 
@@ -29,7 +29,7 @@ jank-platform.iso: jank-platform.bin
 	grub-mkrescue -o jank-platform.iso isodir
 
 qemu: jank-platform.bin
-	qemu-system-i386 -cdrom jank-platform.iso
+	qemu-system-i386 -serial file:serial.log -cdrom jank-platform.iso
 
 gdb: jank-platform.bin
-	qemu-system-i386 -s -S -cdrom jank-platform.iso
+	qemu-system-i386 -s -S -serial file:serial.log -cdrom jank-platform.iso
