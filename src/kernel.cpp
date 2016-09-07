@@ -96,9 +96,11 @@ void terminal_writestring(const char* data) {
 extern "C"
 void kernel_main(int32_t const ebx)
 {
-  static_cast<void>(ebx);
-  terminal_initialize();
+  if(!ebx)
+  { return; } // TODO: Error
 
-  while(true)
-  { terminal_writestring("."); }
+  auto const &multiboot(*reinterpret_cast<multiboot_info*>(ebx));
+  static_cast<void>(multiboot);
+
+  terminal_initialize();
 }
