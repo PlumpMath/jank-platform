@@ -81,12 +81,16 @@ mov $stack_top, %esp
 # runtime support to work as well.
 
 # Verify that GRUB handled our multiboot requests properly
-#cmp %eax, 0x2BADB002
-#jne .invalid_boot
-push %eax
+xor %ecx, %ecx
+cmp $0x2BADB002, %eax
+jne .no_multiboot
+
+mov %ebx, %ecx
+
+.no_multiboot:
 
 # Pass Multiboot structure to main
-push %ebx
+push %ecx
 
 # Enter the high-level kernel. The ABI requires the stack is 16-byte
 # aligned at the time of the call instruction (which afterwards pushes
@@ -106,11 +110,6 @@ call kernel_main
 #    Since they are disabled, this will lock up the computer.
 # 3) Jump to the hlt instruction if it ever wakes up due to a
 #    non-maskable interrupt occurring or due to system management mode.
-cli
-1:  hlt
-jmp 1b
-
-.invalid_boot:
 cli
 1:  hlt
 jmp 1b
