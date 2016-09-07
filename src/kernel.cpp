@@ -76,9 +76,18 @@ extern "C" void kernel_main(multiboot_info const * const multiboot)
       uint32_t const pixel_width{ bpp / 8 };
       uint64_t const framebuffer{ mboot.framebuffer_addr };
       uint64_t pixel_offset = (y * pitch) + (x * pixel_width);
+
+      int32_t color{ 0xFDF6E3 };
+      if(x < (width / 2) && (y < (height / 2)))
+      { color = 0xCB4B16; }
+      else if(x > (width / 2) && (y > (height / 2)))
+      { color = 0x859900; }
+      else if(x < (width / 2) && (y > (height / 2)))
+      { color = 0x268BD2; }
+
       putpixel(reinterpret_cast<unsigned char*>(framebuffer),
                pixel_offset,
-               0xFF0000);
+               color);
     }
   }
 }
