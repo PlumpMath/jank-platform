@@ -30,6 +30,3 @@ jank-platform.iso: jank-platform.bin
 
 qemu: jank-platform.bin
 	qemu-system-i386 -cdrom jank-platform.iso
-
-qemu-64: jank-platform.bin
-	qemu-system-x86_64 -cdrom jank-platform.iso
