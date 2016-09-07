@@ -96,6 +96,7 @@ void terminal_writestring(const char* data) {
 extern "C"
 void kernel_main(int32_t const ebx)
 {
+  static_cast<void>(ebx);
   terminal_initialize();
 
   while(true)

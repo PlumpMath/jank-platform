@@ -80,8 +80,12 @@ mov $stack_top, %esp
 # C++ features such as global constructors and exceptions will require
 # runtime support to work as well.
 
-# Pass Multiboot structe to main
-push ebx
+# Verify that GRUB handled our multiboot requests properly
+cmp %eax, 0x2BADB002
+jne .invalid_boot
+
+# Pass Multiboot structure to main
+push %ebx
 
 # Enter the high-level kernel. The ABI requires the stack is 16-byte
 # aligned at the time of the call instruction (which afterwards pushes
@@ -101,6 +105,11 @@ call kernel_main
 #    Since they are disabled, this will lock up the computer.
 # 3) Jump to the hlt instruction if it ever wakes up due to a
 #    non-maskable interrupt occurring or due to system management mode.
+cli
+1:  hlt
+jmp 1b
+
+.invalid_boot:
 cli
 1:  hlt
 jmp 1b
