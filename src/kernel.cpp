@@ -39,6 +39,9 @@ void write_serial(char const * const s)
 
 char const* itoa(int val, int const base)
 {
+  if(val == 0)
+  { return "0"; }
+
   static char buf[32]{};
   int i{ 30 };
   for(; val && i; --i, val /= base)
@@ -67,6 +70,12 @@ extern "C" void kernel_main(multiboot_info const * const multiboot)
   }
 
   auto const &mboot(*multiboot);
+
+  write_serial("mem_lower: ");
+  write_serial(itoa(mboot.mem_lower, 10));
+  write_serial("KB mem_upper: ");
+  write_serial(itoa(mboot.mem_upper, 10));
+  write_serial("KB\n");
 
   auto const width(mboot.framebuffer_width);
   write_serial("framebuffer: ");
