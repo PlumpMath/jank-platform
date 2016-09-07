@@ -2,4 +2,4 @@
 
 source ~/.bashrc
 
-export PS1=[dev]$PS1
+export PS1="[dev] $PS1"
