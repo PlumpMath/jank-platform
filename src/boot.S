@@ -8,8 +8,8 @@
 
 # Frame buffer request
 .set FRAMEBUFFER_TYPE, 0 # linear
-.set FRAMEBUFFER_WIDTH, 1024
-.set FRAMEBUFFER_HEIGHT, 768
+.set FRAMEBUFFER_WIDTH, 800
+.set FRAMEBUFFER_HEIGHT, 600
 .set FRAMEBUFFER_DEPTH, 32
 
 # Declare a multiboot header that marks the program as a kernel. These are magic
