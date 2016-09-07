@@ -10,7 +10,6 @@ cxx_flags=-std=c++14 \
 					-ggdb \
 					-O0 -Wall -Wextra -Werror -pedantic \
 					-nostdlib -fno-exceptions -fno-rtti \
-					#-mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2
 
 kernel.o:
 	${CXX} -c src/kernel.cpp -o kernel.o ${cxx_flags}
