@@ -3,6 +3,7 @@
 
 #include "multiboot.hpp"
 #include "serial.hpp"
+#include "gdt.hpp"
 
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
@@ -43,6 +44,9 @@ extern "C" void kernel_main(multiboot_info const * const multiboot)
     write_serial("multiboot is invalid\n");
     return;
   }
+
+  init_descriptor_tables();
+  write_serial("descriptor tables initialized\n");
 
   auto const &mboot(*multiboot);
 

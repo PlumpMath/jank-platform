@@ -52,6 +52,23 @@ stack_top:
 # bootloader will jump to this position once the kernel has been loaded. It
 # doesn't make sense to return from this function as the bootloader is gone.
 .section .text
+
+.global gdt_flush
+.type gdt_flush, @function
+gdt_flush:
+  mov 4(%esp), %eax  # Get the pointer to the GDT, passed as a parameter.
+  lgdt (%eax)        # Load the new GDT pointer
+
+  mov $0x10, %ax     # 0x10 is the offset in the GDT to our data segment
+  mov %ax, %ds       # Load all data segment selectors
+  mov %ax, %es
+  mov %ax, %fs
+  mov %ax, %gs
+  mov %ax, %ss
+  ljmp $0x08, $.flush # 0x08 is the offset to our code segment: Far jump!
+.flush:
+  ret
+
 .global _start
 .type _start, @function
 _start:
