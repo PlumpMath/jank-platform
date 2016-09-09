@@ -13,17 +13,29 @@ struct gdt_entry
   uint8_t  base_high;   // The last 8 bits of the base.
 } __attribute__((packed));
 
-struct gdt_ptr
+struct idt_entry
 {
-  uint16_t limit; // The upper 16 bits of all selector limits.
-  uint32_t base;  // The address of the first gdt_entry_t struct.
+  uint16_t base_lo;   // The lower 16 bits of the address to jump to when this interrupt fires.
+  uint16_t sel;       // Kernel segment selector.
+  uint8_t  always0;   // This must always be zero.
+  uint8_t  flags;     // More flags. See documentation.
+  uint16_t base_hi;   // The upper 16 bits of the address to jump to.
 } __attribute__((packed));
 
-// Lets us access our ASM functions from our C code.
+struct descriptor_ptr
+{
+  uint16_t limit; // The upper 16 bits of all selector limits.
+  uint32_t base;  // The address of the first entry.
+} __attribute__((packed));
+
 extern "C" void gdt_flush(uint32_t);
+extern "C" void idt_flush(uint32_t);
 
 gdt_entry gdt_entries[5]{};
-gdt_ptr   gdt_ptr{};
+descriptor_ptr gdt_ptr{};
+
+idt_entry idt_entries[256]{};
+descriptor_ptr idt_ptr{};
 
 // Set the value of one GDT entry.
 void gdt_set_gate(int32_t num, uint32_t base,
@@ -54,7 +66,35 @@ void init_gdt()
   gdt_flush(reinterpret_cast<uint32_t>(&gdt_ptr));
 }
 
+void idt_set_gate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags)
+{
+   idt_entries[num].base_lo = base & 0xFFFF;
+   idt_entries[num].base_hi = (base >> 16) & 0xFFFF;
+
+   idt_entries[num].sel     = sel;
+   idt_entries[num].always0 = 0;
+   // We must uncomment the OR below when we get to using user-mode.
+   // It sets the interrupt gate's privilege level to 3.
+   idt_entries[num].flags   = flags /* | 0x60 */;
+}
+
+void init_idt()
+{
+   idt_ptr.limit = sizeof(idt_entry) * 256 -1;
+   idt_ptr.base  = (uint32_t)&idt_entries;
+
+   memset(&idt_entries, 0, sizeof(idt_entry) * 256);
+
+   idt_set_gate(0, (uint32_t)isr0 , 0x08, 0x8E);
+   idt_set_gate(1, (uint32_t)isr1 , 0x08, 0x8E);
+   ...
+   idt_set_gate(31, (uint32_t)isr32, 0x08, 0x8E);
+
+   idt_flush((uint32_t)&idt_ptr);
+}
+
 void init_descriptor_tables()
 {
   init_gdt();
+  init_idt();
 }
